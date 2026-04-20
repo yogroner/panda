@@ -1,0 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Unbounded:wght@200;400;700;900&family=DM+Mono:ital@0;1&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-headline: "Heebo", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Heebo", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Unbounded", "Heebo", sans-serif;
+  --font-mono: "DM Mono", monospace;
+  --font-sans: "Heebo", ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: #a1d494;
+  --color-on-primary: #1d4918;
+  --color-background: #070709;
+  --color-surface: rgba(255, 255, 255, 0.04);
+  --color-surface-container: #191a1a;
+  --color-surface-container-low: #131313;
+  --color-surface-container-high: #1f2020;
+  --color-outline-variant: rgba(255, 255, 255, 0.1);
+  --color-secondary: rgba(255, 255, 255, 0.7);
+  --color-accent1: #b3ffc8;
+  --color-accent2: #ff6ef7;
+  --color-accent3: #5eadff;
+
+  --animate-fade-in: fade-in 1s ease-out forwards;
+  --animate-bounce: bounce 2s infinite;
+  --animate-aurora-drift: aurora-drift 16s ease-in-out infinite alternate;
+  --animate-marquee-scroll: marquee-scroll 22s linear infinite;
+
+  --animate-glitch-1: glitch-anim-1 2s linear infinite;
+  --animate-glitch-2: glitch-anim-2 2s linear infinite;
+
+  @keyframes glitch-anim-1 {
+    0% { clip: rect(20px, 9999px, 40px, 0); }
+    5% { clip: rect(180px, 9999px, 200px, 0); }
+    10% { clip: rect(10px, 9999px, 30px, 0); }
+    15% { clip: rect(220px, 9999px, 240px, 0); }
+    20% { clip: rect(50px, 9999px, 70px, 0); }
+    25% { clip: rect(240px, 9999px, 260px, 0); }
+    30% { clip: rect(30px, 9999px, 50px, 0); }
+    35% { clip: rect(100px, 9999px, 120px, 0); }
+    40% { clip: rect(10px, 9999px, 30px, 0); }
+    45% { clip: rect(230px, 9999px, 250px, 0); }
+    50% { clip: rect(60px, 9999px, 80px, 0); }
+    55% { clip: rect(10px, 9999px, 30px, 0); }
+    60% { clip: rect(210px, 9999px, 230px, 0); }
+    65% { clip: rect(40px, 9999px, 60px, 0); }
+    70% { clip: rect(240px, 9999px, 260px, 0); }
+    75% { clip: rect(20px, 9999px, 40px, 0); }
+    80% { clip: rect(190px, 9999px, 210px, 0); }
+    85% { clip: rect(10px, 9999px, 30px, 0); }
+    90% { clip: rect(220px, 9999px, 240px, 0); }
+    95% { clip: rect(50px, 9999px, 70px, 0); }
+    100% { clip: rect(10px, 9999px, 30px, 0); }
+  }
+
+  @keyframes glitch-anim-2 {
+    0% { clip: rect(200px, 9999px, 220px, 0); }
+    5% { clip: rect(20px, 9999px, 40px, 0); }
+    10% { clip: rect(240px, 9999px, 260px, 0); }
+    15% { clip: rect(60px, 9999px, 80px, 0); }
+    20% { clip: rect(10px, 9999px, 30px, 0); }
+    25% { clip: rect(210px, 9999px, 230px, 0); }
+    30% { clip: rect(40px, 9999px, 60px, 0); }
+    35% { clip: rect(230px, 9999px, 250px, 0); }
+    40% { clip: rect(70px, 9999px, 90px, 0); }
+    45% { clip: rect(20px, 9999px, 40px, 0); }
+    50% { clip: rect(200px, 9999px, 220px, 0); }
+    55% { clip: rect(30px, 9999px, 50px, 0); }
+    60% { clip: rect(240px, 9999px, 260px, 0); }
+    65% { clip: rect(80px, 9999px, 100px, 0); }
+    70% { clip: rect(10px, 9999px, 30px, 0); }
+    75% { clip: rect(220px, 9999px, 240px, 0); }
+    80% { clip: rect(50px, 9999px, 70px, 0); }
+    85% { clip: rect(230px, 9999px, 250px, 0); }
+    90% { clip: rect(40px, 9999px, 60px, 0); }
+    95% { clip: rect(210px, 9999px, 230px, 0); }
+    100% { clip: rect(20px, 9999px, 40px, 0); }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+    50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+  }
+
+  @keyframes aurora-drift {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(6vw, -4vh) scale(1.08); }
+    66% { transform: translate(-4vw, 5vh) scale(0.95); }
+    100% { transform: translate(3vw, 2vh) scale(1.05); }
+  }
+
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes border-spin {
+    from { --angle: 0deg; }
+    to { --angle: 360deg; }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply font-sans bg-background text-foreground;
+    direction: rtl;
+    cursor: none;
+  }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  
+  /* Custom Dark Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0c;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2a2a2c;
+    border-radius: 10px;
+    border: 2px solid #0a0a0c;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3a3a3c;
+  }
+}
+
+@layer utilities {
+  .aura-glow {
+    background: radial-gradient(circle at 50% 50%, rgba(45, 90, 39, 0.15) 0%, rgba(14, 14, 14, 0) 70%);
+  }
+  .glass-nav {
+    background: rgba(7, 7, 9, 0.7);
+    backdrop-filter: blur(20px);
+  }
+  .text-editorial {
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  .hero-gradient {
+    background: radial-gradient(80% 50% at 50% -10%, rgba(179, 255, 200, 0.15) 0%, rgba(7, 7, 9, 0) 100%);
+  }
+  .noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: 'Geist Variable', sans-serif;
+  --font-mono: var(--font-geist-mono);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: #a1d494;
+  --primary-foreground: #1d4918;
+  --secondary: oklch(0.85 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+.dark {
+  /* Dark mode is default for this app, so we can keep it same or tweak */
+}
+
+/* 
+  Global Accessibility System
+  - Simple, robust scaling that affects everything proportionally.
+*/
+
+/* 1. Universal Text Enlargement - Scaling the root affects ALL rem units */
+html.large-text {
+  /* Everything on the page grows by ~25% */
+  font-size: 1.25em !important;
+}
+
+/* 2. High Contrast mode refinements */
+.high-contrast-mode {
+  filter: contrast(2.2) saturate(0) brightness(1.2) !important;
+}
+
+body.high-contrast {
+  background-color: #000 !important;
+  cursor: auto !important; /* Standard cursor for visibility */
+}
+
+body.high-contrast .bg-background,
+body.high-contrast .bg-surface,
+body.high-contrast .glass-nav {
+  background-color: #000 !important;
+}
+
+body.high-contrast * {
+  border-color: #fff !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
