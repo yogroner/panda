@@ -20,7 +20,7 @@ const imageBinaryCache = new NodeCache({ stdTTL: 600, maxKeys: 50 });
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT || 3000;
 
   // Google Drive Auth setup using Service Account
   const getDriveClient = () => {
