@@ -18,6 +18,7 @@ const __dirname = path.dirname(__filename);
 const metadataCache = new NodeCache({ stdTTL: 3600 });
 const imageBinaryCache = new NodeCache({ stdTTL: 600, maxKeys: 50 });
 
+// Production server entry point for Hostinger Node.js Web App
 async function startServer() {
   const app = express();
   const PORT = process.env.PORT || 3000;
