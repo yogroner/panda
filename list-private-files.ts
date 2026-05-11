@@ -11,6 +11,12 @@ export function getDriveClient() {
   }
 
   try {
+    // DIAGNOSTIC LOGS
+    console.log("DIAGNOSTIC: Total Length:", serviceAccountJson?.length);
+    console.log("DIAGNOSTIC: Snippet at 2295:", JSON.stringify(serviceAccountJson?.substring(2285, 2305)));
+    const snippet = serviceAccountJson?.substring(2285, 2305) || "";
+    console.log("DIAGNOSTIC: CharCodes:", snippet.split('').map(c => c.charCodeAt(0)));
+
     // Surgical Clean: Remove the leading/trailing backslashes and quotes
     let rawJson = serviceAccountJson.trim()
       .replace(/^\\+/, '')
