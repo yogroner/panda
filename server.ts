@@ -18,8 +18,7 @@ if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
     .replace(/^\\+/, '') // Remove leading backslash
     .replace(/\\+$/, '') // Remove trailing backslash
     .replace(/^"+|"+$/g, '') // Remove wrapping quotes
-    .replace(/\\"/g, '"') // Unescape double quotes
-    .replace(/\\\\/g, '\\'); // Fix double-escaped backslashes
+    .replace(/\\(?=[^"\\\/bfnrtu])/g, ''); // Remove illegal backslashes (not followed by valid JSON escape char)
 }
 
 const __filename = fileURLToPath(import.meta.url);

@@ -11,7 +11,14 @@ export function getDriveClient() {
   }
 
   try {
-    const credentials = JSON.parse(serviceAccountJson);
+    // Surgical Clean: Remove illegal backslashes injected by some hosts
+    const cleanedJson = serviceAccountJson.trim()
+      .replace(/^\\+/, '')
+      .replace(/\\+$/, '')
+      .replace(/^"+|"+$/g, '')
+      .replace(/\\(?=[^"\\\/bfnrtu])/g, '');
+
+    const credentials = JSON.parse(cleanedJson);
     
     // Final repair of newlines for the RSA key
     if (credentials.private_key) {
@@ -27,10 +34,10 @@ export function getDriveClient() {
   } catch (error: any) {
     console.error('GOOGLE_SERVICE_ACCOUNT_JSON parsing failed. Error:', error.message);
     
-    // Precision Debugging for Bad Escaped Character at position 2239
+    // Fallback debugging data
     const pos = 2239; 
-    const context = serviceAccountJson.substring(pos - 10, pos + 10);
-    console.log("DEBUG: String around error index 2239:", JSON.stringify(context));
+    const context = serviceAccountJson.substring(Math.max(0, pos - 10), Math.min(serviceAccountJson.length, pos + 10));
+    console.log("DEBUG: String around error index 2239 (raw):", JSON.stringify(context));
     console.log("DEBUG: Char codes around error:", context.split('').map(c => c.charCodeAt(0)));
     console.log("DEBUG: Character at exact position:", JSON.stringify(serviceAccountJson[pos]), "Code:", serviceAccountJson[pos]?.charCodeAt(0));
     
