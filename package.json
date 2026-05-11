@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
-    "start": "node index.js",
-    "build": "vite build",
+    "start": "node dist-server/index.js",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=esm --outfile=dist-server/index.js --external:vite --external:sharp --external:fsevents --external:express",
     "preview": "vite preview",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist dist-server",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
@@ -24,6 +24,7 @@
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
     "dotenv": "^17.2.3",
+    "esbuild": "^0.25.0",
     "express": "^4.21.2",
     "framer-motion": "^12.38.0",
     "google-auth-library": "^10.6.2",

@@ -214,8 +214,11 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
+    // SERVE STATIC FILES (For Hostinger/Production)
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
+    
+    // SPA Fallback
     app.get("*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
