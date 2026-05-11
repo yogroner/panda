@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import NodeCache from "node-cache";
 import sharp from "sharp";
 import stream from "stream";
+import { getDriveClient } from "./list-private-files.js";
 
 dotenv.config();
 
@@ -22,42 +23,6 @@ const imageBinaryCache = new NodeCache({ stdTTL: 600, maxKeys: 50 });
 async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
-
-  // Google Drive Auth setup using Service Account
-  const getDriveClient = () => {
-    const serviceAccountJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
-    if (!serviceAccountJson) {
-      throw new Error("GOOGLE_SERVICE_ACCOUNT_JSON is missing.");
-    }
-    
-    try {
-      // Surgical Clean: Remove leading/trailing backslashes or wrapping double-quotes
-      let rawJson = serviceAccountJson.trim()
-        .replace(/^\\+/, '')
-        .replace(/\\+$/, '')
-        .replace(/^"+|"+$/g, '');
-        
-      // Normalize literal backslashes for newlines before parsing
-      const cleanedJson = rawJson.replace(/\\n/g, "\\\\n");
-        
-      const credentials = JSON.parse(cleanedJson);
-      if (credentials.private_key) {
-        // Final repair of newlines for the RSA key
-        credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
-      }
-
-      const auth = new google.auth.GoogleAuth({
-        credentials,
-        scopes: ["https://www.googleapis.com/auth/drive.readonly"],
-      });
-      
-      return google.drive({ version: "v3", auth });
-    } catch (error: any) {
-      console.error("GOOGLE_SERVICE_ACCOUNT_JSON parsing failed. Error:", error.message);
-      console.error("Raw prefix:", serviceAccountJson.substring(0, 15));
-      throw error;
-    }
-  };
 
   const FOLDER_ID = "1sCYuhbPT54RHcrmKpYSfhWWIJC_RaKwc";
 

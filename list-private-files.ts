@@ -3,24 +3,48 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-async function listFiles() {
-  const folderId = '1sCYuhbPT54RHcrmKpYSfhWWIJC_RaKwc';
+export function getDriveClient() {
   const serviceAccountJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
 
   if (!serviceAccountJson) {
-    console.error('Error: GOOGLE_SERVICE_ACCOUNT_JSON environment variable is not set.');
-    return;
+    throw new Error('GOOGLE_SERVICE_ACCOUNT_JSON environment variable is not set.');
   }
 
   try {
-    const credentials = JSON.parse(serviceAccountJson);
+    // Surgical Clean: Remove the leading/trailing backslashes and quotes
+    let rawJson = serviceAccountJson.trim()
+      .replace(/^\\+/, '')
+      .replace(/\\+$/, '')
+      .replace(/^"+|"+$/g, '');
+
+    // Fix the bad escape characters by normalizing backslashes
+    const cleanedJson = rawJson.replace(/\\n/g, "\\\\n"); 
+
+    const credentials = JSON.parse(cleanedJson);
     
+    // Final repair of newlines for the RSA key
+    if (credentials.private_key) {
+      credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
+    }
+
     const auth = new google.auth.GoogleAuth({
       credentials,
       scopes: ['https://www.googleapis.com/auth/drive.readonly'],
     });
 
-    const drive = google.drive({ version: 'v3', auth });
+    return google.drive({ version: 'v3', auth });
+  } catch (error: any) {
+    console.error('GOOGLE_SERVICE_ACCOUNT_JSON parsing failed. Error:', error.message);
+    console.error('Raw prefix:', serviceAccountJson.substring(0, 15));
+    throw error;
+  }
+}
+
+async function listFiles() {
+  const folderId = '1sCYuhbPT54RHcrmKpYSfhWWIJC_RaKwc';
+  
+  try {
+    const drive = getDriveClient();
 
     console.log(`Listing files in folder: ${folderId}...`);
 
@@ -40,10 +64,10 @@ async function listFiles() {
     }
   } catch (error: any) {
     console.error('An error occurred:', error.message);
-    if (error.message.includes('Unexpected token')) {
-      console.error('Tip: Make sure GOOGLE_SERVICE_ACCOUNT_JSON is a valid JSON string.');
-    }
   }
 }
 
-listFiles();
+// Only run if called directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  listFiles();
+}

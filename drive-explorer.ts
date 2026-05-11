@@ -9,7 +9,7 @@ dotenv.config();
  * stored in an environment variable.
  */
 async function exploreDrive() {
-  const folderId = '1sCYuhbPT54RHcrmKpYSfhWWIJC_RaKwc'; // Replace with your folder ID if needed
+  const folderId = '1sCYuhbPT54RHcrmKpYSfhWWIJC_RaKwc'; 
   const serviceAccountJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
 
   if (!serviceAccountJson) {
@@ -18,8 +18,16 @@ async function exploreDrive() {
   }
 
   try {
-    // Parse the credentials from the environment secret
-    const credentials = JSON.parse(serviceAccountJson);
+    // Surgical Clean: Remove the leading/trailing backslashes and quotes
+    let rawJson = serviceAccountJson.trim()
+      .replace(/^\\+/, '')
+      .replace(/\\+$/, '')
+      .replace(/^"+|"+$/g, '');
+
+    // Fix the bad escape characters by normalizing backslashes
+    const cleanedJson = rawJson.replace(/\\n/g, "\\\\n"); 
+
+    const credentials = JSON.parse(cleanedJson);
     
     // Security Requirement: Ensure the private_key is handled correctly
     if (credentials.private_key) {
@@ -55,7 +63,8 @@ async function exploreDrive() {
       console.log('No files found in this folder.');
     }
   } catch (error: any) {
-    console.error('An error occurred during drive exploration:', error.message);
+    console.error('GOOGLE_SERVICE_ACCOUNT_JSON parsing failed. Error:', error.message);
+    console.error('Raw prefix:', serviceAccountJson.substring(0, 15));
   }
 }
 
