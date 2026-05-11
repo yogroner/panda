@@ -11,6 +11,17 @@ import { getDriveClient } from "./list-private-files.js";
 
 dotenv.config();
 
+// Global normalization for Hostinger environment variables
+if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
+  process.env.GOOGLE_SERVICE_ACCOUNT_JSON = process.env.GOOGLE_SERVICE_ACCOUNT_JSON
+    .trim()
+    .replace(/^\\+/, '') // Remove leading backslash
+    .replace(/\\+$/, '') // Remove trailing backslash
+    .replace(/^"+|"+$/g, '') // Remove wrapping quotes
+    .replace(/\\"/g, '"') // Unescape double quotes
+    .replace(/\\\\/g, '\\'); // Fix double-escaped backslashes
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

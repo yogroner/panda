@@ -18,22 +18,7 @@ async function exploreDrive() {
   }
 
   try {
-    // DIAGNOSTIC LOGS
-    console.log("DIAGNOSTIC: Total Length:", serviceAccountJson?.length);
-    console.log("DIAGNOSTIC: Snippet at 2295:", JSON.stringify(serviceAccountJson?.substring(2285, 2305)));
-    const snippet = serviceAccountJson?.substring(2285, 2305) || "";
-    console.log("DIAGNOSTIC: CharCodes:", snippet.split('').map(c => c.charCodeAt(0)));
-
-    // Surgical Clean: Remove the leading/trailing backslashes and quotes
-    let rawJson = serviceAccountJson.trim()
-      .replace(/^\\+/, '')
-      .replace(/\\+$/, '')
-      .replace(/^"+|"+$/g, '');
-
-    // Fix the bad escape characters by normalizing backslashes
-    const cleanedJson = rawJson.replace(/\\n/g, "\\\\n"); 
-
-    const credentials = JSON.parse(cleanedJson);
+    const credentials = JSON.parse(serviceAccountJson);
     
     // Security Requirement: Ensure the private_key is handled correctly
     if (credentials.private_key) {
@@ -70,7 +55,6 @@ async function exploreDrive() {
     }
   } catch (error: any) {
     console.error('GOOGLE_SERVICE_ACCOUNT_JSON parsing failed. Error:', error.message);
-    console.error('Raw prefix:', serviceAccountJson.substring(0, 15));
   }
 }
 
