@@ -21,7 +21,7 @@ const imageBinaryCache = new NodeCache({ stdTTL: 600, maxKeys: 50 });
 // Production server entry point for Hostinger Node.js Web App
 async function startServer() {
   const app = express();
-  const PORT = process.env.PORT || 3000;
+  const PORT = Number(process.env.PORT) || 3000;
 
   // Google Drive Auth setup using Service Account
   const getDriveClient = () => {
@@ -30,17 +30,28 @@ async function startServer() {
       throw new Error("GOOGLE_SERVICE_ACCOUNT_JSON is missing.");
     }
     
-    const credentials = JSON.parse(serviceAccountJson);
-    if (credentials.private_key) {
-      credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
-    }
+    try {
+      // Surgical Clean: Remove leading/trailing backslashes or wrapping double-quotes added by some hosts
+      const cleanedJson = serviceAccountJson.trim()
+        .replace(/^\\+/, '')
+        .replace(/\\+$/, '')
+        .replace(/^"+|"+$/g, '');
+        
+      const credentials = JSON.parse(cleanedJson);
+      if (credentials.private_key) {
+        credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
+      }
 
-    const auth = new google.auth.GoogleAuth({
-      credentials,
-      scopes: ["https://www.googleapis.com/auth/drive.readonly"],
-    });
-    
-    return google.drive({ version: "v3", auth });
+      const auth = new google.auth.GoogleAuth({
+        credentials,
+        scopes: ["https://www.googleapis.com/auth/drive.readonly"],
+      });
+      
+      return google.drive({ version: "v3", auth });
+    } catch (error: any) {
+      console.error("GOOGLE_SERVICE_ACCOUNT_JSON parsing failed. Raw prefix:", serviceAccountJson.substring(0, 15));
+      throw error;
+    }
   };
 
   const FOLDER_ID = "1sCYuhbPT54RHcrmKpYSfhWWIJC_RaKwc";
