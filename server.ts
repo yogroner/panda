@@ -31,14 +31,18 @@ async function startServer() {
     }
     
     try {
-      // Surgical Clean: Remove leading/trailing backslashes or wrapping double-quotes added by some hosts
-      const cleanedJson = serviceAccountJson.trim()
+      // Surgical Clean: Remove leading/trailing backslashes or wrapping double-quotes
+      let rawJson = serviceAccountJson.trim()
         .replace(/^\\+/, '')
         .replace(/\\+$/, '')
         .replace(/^"+|"+$/g, '');
         
+      // Normalize literal backslashes for newlines before parsing
+      const cleanedJson = rawJson.replace(/\\n/g, "\\\\n");
+        
       const credentials = JSON.parse(cleanedJson);
       if (credentials.private_key) {
+        // Final repair of newlines for the RSA key
         credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
       }
 
@@ -49,7 +53,8 @@ async function startServer() {
       
       return google.drive({ version: "v3", auth });
     } catch (error: any) {
-      console.error("GOOGLE_SERVICE_ACCOUNT_JSON parsing failed. Raw prefix:", serviceAccountJson.substring(0, 15));
+      console.error("GOOGLE_SERVICE_ACCOUNT_JSON parsing failed. Error:", error.message);
+      console.error("Raw prefix:", serviceAccountJson.substring(0, 15));
       throw error;
     }
   };
